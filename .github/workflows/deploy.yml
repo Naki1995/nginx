@@ -1,0 +1,33 @@
+name: CI/CD pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Connect to server
+        env:
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.SSH_HOST }}
+          USER_NAME: ${{ secrets.USER_NAME }}
+        run: |
+          echo "$PRIVATE_KEY" > private_key && chmod 600 private_key 
+          ssh -o StrictHostKeyChecking=no -i private_key ${USER_NAME}@${HOSTNAME} '
+          echo "Connected to server"
+          cd /root/nginx
+          git pull
+          sudo ngninx -t
+          if [ $? -ne 0 ]; then
+            echo "Nginx configuration test failed"
+            exit 1
+          fi
+          echo "Nginx configuration test passed"
+          sudo systemctl restart nginx
+          echo "Nginx restarted successfully"
+          '
