@@ -22,7 +22,7 @@ jobs:
           echo "Connected to server"
           cd /root/nginx
           git pull
-          sudo ngninx -t
+          sudo nginx -t
           if [ $? -ne 0 ]; then
             echo "Nginx configuration test failed"
             exit 1
