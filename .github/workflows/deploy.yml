@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  pull_nginx_and_restart:
     runs-on: ubuntu-latest
     
     steps:
