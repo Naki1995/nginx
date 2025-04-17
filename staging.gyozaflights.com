@@ -1,5 +1,5 @@
 server {
-    server_name narek.staging.gyozaflights.com;
+    server_name staging.gyozaflights.com;
 
     location / {
         proxy_pass http://localhost:8080;
